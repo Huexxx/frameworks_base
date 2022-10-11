@@ -26,7 +26,9 @@ import android.net.wifi.WifiClient;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.HandlerExecutor;
+import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -68,6 +70,7 @@ public class HotspotControllerImpl implements HotspotController, WifiManager.Sof
     private final boolean mIsTetheringSupportedConfig;
     private volatile boolean mHasTetherableWifiRegexs = true;
     private boolean mWaitingForTerminalState;
+    private int mSpoofCountry;
 
     private TetheringManager.TetheringEventCallback mTetheringCallback =
             new TetheringManager.TetheringEventCallback() {
@@ -210,6 +213,36 @@ public class HotspotControllerImpl implements HotspotController, WifiManager.Sof
         if (enabled) {
             mWaitingForTerminalState = true;
             if (DEBUG) Log.d(TAG, "Starting tethering");
+            mSpoofCountry = Settings.System.getIntForUser(mContext.getContentResolver(),
+                "softap_spoof_country_code", 0, UserHandle.USER_CURRENT);
+
+            if (mSpoofCountry != 0) {
+                switch (mSpoofCountry) {
+                    case 1:
+                        if (mWifiManager.getCountryCode() != "00") mWifiManager.setOverrideCountryCode("00");
+                        break;
+                    case 2:
+                        if (mWifiManager.getCountryCode() != "US") mWifiManager.setOverrideCountryCode("US");
+                        break;
+                    case 3:
+                        if (mWifiManager.getCountryCode() != "IN") mWifiManager.setOverrideCountryCode("IN");
+                        break;
+                    case 4:
+                        if (mWifiManager.getCountryCode() != "SG") mWifiManager.setOverrideCountryCode("SG");
+                        break;
+                    case 5:
+                        if (mWifiManager.getCountryCode() != "TW") mWifiManager.setOverrideCountryCode("TW");
+                        break;
+                    case 6:
+                        if (mWifiManager.getCountryCode() != "CN") mWifiManager.setOverrideCountryCode("CN");
+                        break;
+                    case 7:
+                        if (mWifiManager.getCountryCode() != "HK") mWifiManager.setOverrideCountryCode("HK");
+                        break;
+                    case 8:
+                        if (mWifiManager.getCountryCode() != "KR") mWifiManager.setOverrideCountryCode("KR");
+                }
+            }
             mTetheringManager.startTethering(new TetheringRequest.Builder(
                     TETHERING_WIFI).setShouldShowEntitlementUi(false).build(),
                     ConcurrentUtils.DIRECT_EXECUTOR,
@@ -270,6 +303,7 @@ public class HotspotControllerImpl implements HotspotController, WifiManager.Sof
             // counters.
             mNumConnectedDevices = 0;
         }
+        if (mHotspotState == WifiManager.WIFI_AP_STATE_DISABLED && mSpoofCountry != 0) mWifiManager.clearOverrideCountryCode();
 
         fireHotspotChangedCallback();
     }
