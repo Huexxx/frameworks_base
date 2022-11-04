@@ -2097,7 +2097,7 @@ public class CallLog {
                     Log.w(LOG_TAG, "Failed to insert into call log; null result uri.");
                 }
 
-                int numDeleted;
+/*                int numDeleted;
                 final String phoneAccountId =
                         values.containsKey(PHONE_ACCOUNT_ID)
                                 ? values.getAsString(PHONE_ACCOUNT_ID) : null;
@@ -2128,7 +2128,7 @@ public class CallLog {
                             + "(SELECT _id FROM calls ORDER BY " + DEFAULT_SORT_ORDER
                             + " LIMIT -1 OFFSET " + maxCallLogSize + ")", null);
                 }
-                Log.i(LOG_TAG, "addEntry: cleaned up " + numDeleted + " old entries");
+                Log.i(LOG_TAG, "addEntry: cleaned up " + numDeleted + " old entries");*/
 
                 return result;
             } catch (IllegalArgumentException e) {
