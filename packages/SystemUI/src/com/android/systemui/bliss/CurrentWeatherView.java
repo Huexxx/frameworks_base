@@ -149,7 +149,7 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
             mWeatherInfo = mWeatherClient.getWeatherInfo();
             if (mWeatherInfo != null) {
                 String formattedCondition = mWeatherInfo.condition;
-                if (formattedCondition.toLowerCase().contains("clouds")) {
+/*                if (formattedCondition.toLowerCase().contains("clouds")) {
                     formattedCondition = mContext.getResources().getString(R.string.weather_condition_clouds);
                 } else if (formattedCondition.toLowerCase().contains("rain")) {
                     formattedCondition = mContext.getResources().getString(R.string.weather_condition_rain);
@@ -163,7 +163,7 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
                     formattedCondition = mContext.getResources().getString(R.string.weather_condition_wind);
                 } else if (formattedCondition.toLowerCase().contains("mist")) {
                     formattedCondition = mContext.getResources().getString(R.string.weather_condition_mist);
-                }
+                }*/
                 Drawable d = mWeatherClient.getWeatherConditionImage(mWeatherInfo.conditionCode);
                 mCurrentImage.setImageDrawable(d);
                 Drawable windImage = mWeatherClient.getResOmni("ic_wind_symbol");
